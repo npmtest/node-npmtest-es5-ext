@@ -1,0 +1,1227 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for All files</title>
+    <meta charset="utf-8">
+    <style>
+        body, html {
+            margin:0; padding: 0;
+        }
+        body {
+            font-family: Arial, Helvetica;
+            font-size: 10pt;
+        }
+        div.header, div.footer {
+            background: #eee;
+            padding: 1em;
+        }
+        div.header {
+            height: 160px;
+            padding: 0 1em 0 1em;
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            border-bottom: 1px solid #666;
+            width: 100%;
+        }
+        div.footer {
+            border-top: 1px solid #666;
+        }
+        div.body {
+            margin-top: 170px;
+        }
+        div.meta {
+            font-size: 90%;
+            text-align: center;
+        }
+        h1, h2, h3 {
+            font-weight: normal;
+        }
+        h1 {
+            font-size: 12pt;
+        }
+        h2 {
+            font-size: 10pt;
+        }
+        pre {
+            font-family: Menlo, Monaco, Consolas, Courier New, monospace;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            tab-size: 2;
+        }
+
+        div.path { font-size: 110%; }
+        div.path a:link, div.path a:visited { color: #000; }
+        table.coverage { border-collapse: collapse; margin:0; padding: 0 }
+
+        table.coverage td {
+            margin: 0;
+            padding: 0;
+            color: #111;
+            vertical-align: top;
+        }
+        table.coverage td.line-count {
+            width: 50px;
+            text-align: right;
+            padding-right: 5px;
+        }
+        table.coverage td.line-coverage {
+            color: #777 !important;
+            text-align: right;
+            border-left: 1px solid #666;
+            border-right: 1px solid #666;
+        }
+
+        table.coverage td.text {
+        }
+
+        table.coverage td span.cline-any {
+            display: inline-block;
+            padding: 0 5px;
+            width: 40px;
+        }
+        table.coverage td span.cline-neutral {
+            background: #eee;
+        }
+        table.coverage td span.cline-yes {
+            background: #b5d592;
+            color: #999;
+        }
+        table.coverage td span.cline-no {
+            background: #fc8c84;
+        }
+
+        .cstat-yes { color: #111; }
+        .cstat-no { background: #fc8c84; color: #111; }
+        .fstat-no { background: #ffc520; color: #111 !important; }
+        .cbranch-no { background:  yellow !important; color: #111; }
+
+        .cstat-skip { background: #ddd; color: #111; }
+        .fstat-skip { background: #ddd; color: #111 !important; }
+        .cbranch-skip { background: #ddd !important; color: #111; }
+
+        .missing-if-branch {
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: black;
+            color: yellow;
+        }
+
+        .skip-if-branch {
+            display: none;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: #ccc;
+            color: white;
+        }
+
+        .missing-if-branch .typ, .skip-if-branch .typ {
+            color: inherit !important;
+        }
+
+        .entity, .metric { font-weight: bold; }
+        .metric { display: inline-block; border: 1px solid #333; padding: 0.3em; background: white; }
+        .metric small { font-size: 80%; font-weight: normal; color: #666; }
+
+        div.coverage-summary table { border-collapse: collapse; margin: 3em; font-size: 110%; }
+        div.coverage-summary td, div.coverage-summary table  th { margin: 0; padding: 0.25em 1em; border-top: 1px solid #666; border-bottom: 1px solid #666; }
+        div.coverage-summary th { text-align: left; border: 1px solid #666; background: #eee; font-weight: normal; }
+        div.coverage-summary th.file { border-right: none !important; }
+        div.coverage-summary th.pic { border-left: none !important; text-align: right; }
+        div.coverage-summary th.pct { border-right: none !important; }
+        div.coverage-summary th.abs { border-left: none !important; text-align: right; }
+        div.coverage-summary td.pct { text-align: right; border-left: 1px solid #666; }
+        div.coverage-summary td.abs { text-align: right; font-size: 90%; color: #444; border-right: 1px solid #666; }
+        div.coverage-summary td.file { text-align: right; border-left: 1px solid #666; white-space: nowrap;  }
+        div.coverage-summary td.pic { min-width: 120px !important;  }
+        div.coverage-summary a:link { color: #000; }
+        div.coverage-summary a:visited { color: #333; }
+        div.coverage-summary tfoot td { border-top: 1px solid #666; }
+
+        div.coverage-summary .yui3-datatable-sort-indicator, div.coverage-summary .dummy-sort-indicator {
+            height: 10px;
+            width: 7px;
+            display: inline-block;
+            margin-left: 0.5em;
+        }
+        div.coverage-summary .yui3-datatable-sort-indicator {
+            background: no-repeat scroll 0 0 transparent;
+        }
+        div.coverage-summary .yui3-datatable-sorted .yui3-datatable-sort-indicator {
+            background-position: 0 -20px;
+        }
+        div.coverage-summary .yui3-datatable-sorted-desc .yui3-datatable-sort-indicator {
+            background-position: 0 -10px;
+        }
+
+        .high { background: #b5d592 !important; }
+        .medium { background: #ffe87c !important; }
+        .low { background: #fc8c84 !important; }
+
+        span.cover-fill, span.cover-empty {
+            display:inline-block;
+            border:1px solid #444;
+            background: white;
+            height: 12px;
+        }
+        span.cover-fill {
+            background: #ccc;
+            border-right: 1px solid #444;
+        }
+        span.cover-empty {
+            background: white;
+            border-left: none;
+        }
+        span.cover-full {
+            border-right: none !important;
+        }
+        pre.prettyprint {
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .com { color: #999 !important; }
+        .ignore-none { color: #999; font-weight: normal; }
+
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1 style="font-weight: bold;">
+        <a href="https://github.com/npmtest/node-npmtest-es5-ext">npmtest-es5-ext (v0.0.1)</a>
+    </h1>
+    <h1>Code coverage report for <span class="entity">All files</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">48.06% <small>(831 / 1729)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">32.37% <small>(291 / 899)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">33.55% <small>(101 / 301)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">54.64% <small>(818 / 1497)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric">26 statements, 1 function, 30 branches</span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"></div>
+</div>
+<div class="body">
+<div class="coverage-summary">
+<table>
+<thead>
+<tr>
+   <th data-col="file" data-fmt="html" data-html="true" class="file">File</th>
+   <th data-col="pic" data-type="number" data-fmt="html" data-html="true" class="pic"></th>
+   <th data-col="statements" data-type="number" data-fmt="pct" class="pct">Statements</th>
+   <th data-col="statements_raw" data-type="number" data-fmt="html" class="abs"></th>
+   <th data-col="branches" data-type="number" data-fmt="pct" class="pct">Branches</th>
+   <th data-col="branches_raw" data-type="number" data-fmt="html" class="abs"></th>
+   <th data-col="functions" data-type="number" data-fmt="pct" class="pct">Functions</th>
+   <th data-col="functions_raw" data-type="number" data-fmt="html" class="abs"></th>
+   <th data-col="lines" data-type="number" data-fmt="pct" class="pct">Lines</th>
+   <th data-col="lines_raw" data-type="number" data-fmt="html" class="abs"></th>
+</tr>
+</thead>
+<tbody><tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/"><a href="node-npmtest-es5-ext/index.html">node-npmtest-es5-ext/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="151" class="abs high">(151&nbsp;/&nbsp;151)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="124" class="abs high">(124&nbsp;/&nbsp;124)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="27" class="abs high">(27&nbsp;/&nbsp;27)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="151" class="abs high">(151&nbsp;/&nbsp;151)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/index.html">node-npmtest-es5-ext/node_modules/es5-ext/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="2" class="abs high">(2&nbsp;/&nbsp;2)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="2" class="abs high">(2&nbsp;/&nbsp;2)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/</a></td>
+	<td data-value="57.14" class="pic medium"><span class="cover-fill" style="width: 57px;"></span><span class="cover-empty" style="width:43px;"></span></td>
+	<td data-value="57.14" class="pct medium">57.14%</td>
+	<td data-value="63" class="abs medium">(36&nbsp;/&nbsp;63)</td>
+	<td data-value="19.23" class="pct low">19.23%</td>
+	<td data-value="26" class="abs low">(5&nbsp;/&nbsp;26)</td>
+	<td data-value="55.56" class="pct medium">55.56%</td>
+	<td data-value="9" class="abs medium">(5&nbsp;/&nbsp;9)</td>
+	<td data-value="65.38" class="pct medium">65.38%</td>
+	<td data-value="52" class="abs medium">(34&nbsp;/&nbsp;52)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/</a></td>
+	<td data-value="22.17" class="pic low"><span class="cover-fill" style="width: 22px;"></span><span class="cover-empty" style="width:78px;"></span></td>
+	<td data-value="22.17" class="pct low">22.17%</td>
+	<td data-value="230" class="abs low">(51&nbsp;/&nbsp;230)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="74" class="abs low">(0&nbsp;/&nbsp;74)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="36" class="abs low">(0&nbsp;/&nbsp;36)</td>
+	<td data-value="25.25" class="pct low">25.25%</td>
+	<td data-value="202" class="abs low">(51&nbsp;/&nbsp;202)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/@@iterator/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/@@iterator/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/@@iterator/</a></td>
+	<td data-value="68.42" class="pic medium"><span class="cover-fill" style="width: 68px;"></span><span class="cover-empty" style="width:32px;"></span></td>
+	<td data-value="68.42" class="pct medium">68.42%</td>
+	<td data-value="19" class="abs medium">(13&nbsp;/&nbsp;19)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="14" class="abs medium">(7&nbsp;/&nbsp;14)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="13" class="abs high">(13&nbsp;/&nbsp;13)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/concat/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/concat/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/concat/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">(4&nbsp;/&nbsp;4)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">(4&nbsp;/&nbsp;4)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/copy-within/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/copy-within/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/copy-within/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/entries/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/entries/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/entries/</a></td>
+	<td data-value="65" class="pic medium"><span class="cover-fill" style="width: 65px;"></span><span class="cover-empty" style="width:35px;"></span></td>
+	<td data-value="65" class="pct medium">65%</td>
+	<td data-value="20" class="abs medium">(13&nbsp;/&nbsp;20)</td>
+	<td data-value="55.56" class="pct medium">55.56%</td>
+	<td data-value="18" class="abs medium">(10&nbsp;/&nbsp;18)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="13" class="abs high">(13&nbsp;/&nbsp;13)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/fill/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/fill/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/fill/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/filter/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/filter/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/filter/</a></td>
+	<td data-value="80" class="pic high"><span class="cover-fill" style="width: 80px;"></span><span class="cover-empty" style="width:20px;"></span></td>
+	<td data-value="80" class="pct high">80%</td>
+	<td data-value="5" class="abs high">(4&nbsp;/&nbsp;5)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="80" class="pct high">80%</td>
+	<td data-value="5" class="abs high">(4&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/find-index/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/find-index/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/find-index/</a></td>
+	<td data-value="87.5" class="pic high"><span class="cover-fill" style="width: 87px;"></span><span class="cover-empty" style="width:13px;"></span></td>
+	<td data-value="87.5" class="pct high">87.5%</td>
+	<td data-value="8" class="abs high">(7&nbsp;/&nbsp;8)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="2" class="abs high">(2&nbsp;/&nbsp;2)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="6" class="abs high">(6&nbsp;/&nbsp;6)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/find/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/find/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/find/</a></td>
+	<td data-value="87.5" class="pic high"><span class="cover-fill" style="width: 87px;"></span><span class="cover-empty" style="width:13px;"></span></td>
+	<td data-value="87.5" class="pct high">87.5%</td>
+	<td data-value="8" class="abs high">(7&nbsp;/&nbsp;8)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="2" class="abs high">(2&nbsp;/&nbsp;2)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="6" class="abs high">(6&nbsp;/&nbsp;6)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/keys/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/keys/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/keys/</a></td>
+	<td data-value="66.67" class="pic medium"><span class="cover-fill" style="width: 66px;"></span><span class="cover-empty" style="width:34px;"></span></td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="18" class="abs medium">(12&nbsp;/&nbsp;18)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="14" class="abs medium">(7&nbsp;/&nbsp;14)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="12" class="abs high">(12&nbsp;/&nbsp;12)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/map/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/map/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/map/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">(4&nbsp;/&nbsp;4)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">(4&nbsp;/&nbsp;4)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/slice/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/slice/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/slice/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">(4&nbsp;/&nbsp;4)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">(4&nbsp;/&nbsp;4)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/splice/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/splice/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/splice/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">(4&nbsp;/&nbsp;4)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="4" class="abs high">(4&nbsp;/&nbsp;4)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/#/values/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/#/values/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/#/values/</a></td>
+	<td data-value="33.33" class="pic low"><span class="cover-fill" style="width: 33px;"></span><span class="cover-empty" style="width:67px;"></span></td>
+	<td data-value="33.33" class="pct low">33.33%</td>
+	<td data-value="21" class="abs low">(7&nbsp;/&nbsp;21)</td>
+	<td data-value="14.29" class="pct low">14.29%</td>
+	<td data-value="14" class="abs low">(2&nbsp;/&nbsp;14)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="42.86" class="pct low">42.86%</td>
+	<td data-value="14" class="abs low">(6&nbsp;/&nbsp;14)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/from/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/from/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/from/</a></td>
+	<td data-value="87.5" class="pic high"><span class="cover-fill" style="width: 87px;"></span><span class="cover-empty" style="width:13px;"></span></td>
+	<td data-value="87.5" class="pct high">87.5%</td>
+	<td data-value="8" class="abs high">(7&nbsp;/&nbsp;8)</td>
+	<td data-value="71.43" class="pct medium">71.43%</td>
+	<td data-value="7" class="abs medium">(5&nbsp;/&nbsp;7)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="7" class="abs high">(7&nbsp;/&nbsp;7)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/array/of/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/array/of/index.html">node-npmtest-es5-ext/node_modules/es5-ext/array/of/</a></td>
+	<td data-value="85.71" class="pic high"><span class="cover-fill" style="width: 85px;"></span><span class="cover-empty" style="width:15px;"></span></td>
+	<td data-value="85.71" class="pct high">85.71%</td>
+	<td data-value="7" class="abs high">(6&nbsp;/&nbsp;7)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="6" class="abs medium">(4&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="6" class="abs high">(6&nbsp;/&nbsp;6)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/boolean/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/boolean/index.html">node-npmtest-es5-ext/node_modules/es5-ext/boolean/</a></td>
+	<td data-value="75" class="pic medium"><span class="cover-fill" style="width: 75px;"></span><span class="cover-empty" style="width:25px;"></span></td>
+	<td data-value="75" class="pct medium">75%</td>
+	<td data-value="4" class="abs medium">(3&nbsp;/&nbsp;4)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">(0&nbsp;/&nbsp;4)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">(0&nbsp;/&nbsp;1)</td>
+	<td data-value="75" class="pct medium">75%</td>
+	<td data-value="4" class="abs medium">(3&nbsp;/&nbsp;4)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/date/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/date/index.html">node-npmtest-es5-ext/node_modules/es5-ext/date/</a></td>
+	<td data-value="55.56" class="pic medium"><span class="cover-fill" style="width: 55px;"></span><span class="cover-empty" style="width:45px;"></span></td>
+	<td data-value="55.56" class="pct medium">55.56%</td>
+	<td data-value="9" class="abs medium">(5&nbsp;/&nbsp;9)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">(0&nbsp;/&nbsp;8)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="2" class="abs low">(0&nbsp;/&nbsp;2)</td>
+	<td data-value="62.5" class="pct medium">62.5%</td>
+	<td data-value="8" class="abs medium">(5&nbsp;/&nbsp;8)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/date/#/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/date/#/index.html">node-npmtest-es5-ext/node_modules/es5-ext/date/#/</a></td>
+	<td data-value="41.18" class="pic low"><span class="cover-fill" style="width: 41px;"></span><span class="cover-empty" style="width:59px;"></span></td>
+	<td data-value="41.18" class="pct low">41.18%</td>
+	<td data-value="34" class="abs low">(14&nbsp;/&nbsp;34)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">(0&nbsp;/&nbsp;8)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">(0&nbsp;/&nbsp;14)</td>
+	<td data-value="42.42" class="pct low">42.42%</td>
+	<td data-value="33" class="abs low">(14&nbsp;/&nbsp;33)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/error/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/error/index.html">node-npmtest-es5-ext/node_modules/es5-ext/error/</a></td>
+	<td data-value="30.43" class="pic low"><span class="cover-fill" style="width: 30px;"></span><span class="cover-empty" style="width:70px;"></span></td>
+	<td data-value="30.43" class="pct low">30.43%</td>
+	<td data-value="23" class="abs low">(7&nbsp;/&nbsp;23)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="18" class="abs low">(0&nbsp;/&nbsp;18)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="3" class="abs low">(0&nbsp;/&nbsp;3)</td>
+	<td data-value="36.84" class="pct low">36.84%</td>
+	<td data-value="19" class="abs low">(7&nbsp;/&nbsp;19)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/error/#/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/error/#/index.html">node-npmtest-es5-ext/node_modules/es5-ext/error/#/</a></td>
+	<td data-value="75" class="pic medium"><span class="cover-fill" style="width: 75px;"></span><span class="cover-empty" style="width:25px;"></span></td>
+	<td data-value="75" class="pct medium">75%</td>
+	<td data-value="4" class="abs medium">(3&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">(0&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="3" class="abs high">(3&nbsp;/&nbsp;3)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/function/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/function/index.html">node-npmtest-es5-ext/node_modules/es5-ext/function/</a></td>
+	<td data-value="36.07" class="pic low"><span class="cover-fill" style="width: 36px;"></span><span class="cover-empty" style="width:64px;"></span></td>
+	<td data-value="36.07" class="pct low">36.07%</td>
+	<td data-value="61" class="abs low">(22&nbsp;/&nbsp;61)</td>
+	<td data-value="7.14" class="pct low">7.14%</td>
+	<td data-value="14" class="abs low">(1&nbsp;/&nbsp;14)</td>
+	<td data-value="11.76" class="pct low">11.76%</td>
+	<td data-value="17" class="abs low">(2&nbsp;/&nbsp;17)</td>
+	<td data-value="43.14" class="pct low">43.14%</td>
+	<td data-value="51" class="abs low">(22&nbsp;/&nbsp;51)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/function/#/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/function/#/index.html">node-npmtest-es5-ext/node_modules/es5-ext/function/#/</a></td>
+	<td data-value="33.96" class="pic low"><span class="cover-fill" style="width: 33px;"></span><span class="cover-empty" style="width:67px;"></span></td>
+	<td data-value="33.96" class="pct low">33.96%</td>
+	<td data-value="53" class="abs low">(18&nbsp;/&nbsp;53)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="10" class="abs low">(0&nbsp;/&nbsp;10)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="16" class="abs low">(0&nbsp;/&nbsp;16)</td>
+	<td data-value="36.73" class="pct low">36.73%</td>
+	<td data-value="49" class="abs low">(18&nbsp;/&nbsp;49)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/iterable/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/iterable/index.html">node-npmtest-es5-ext/node_modules/es5-ext/iterable/</a></td>
+	<td data-value="39.13" class="pic low"><span class="cover-fill" style="width: 39px;"></span><span class="cover-empty" style="width:61px;"></span></td>
+	<td data-value="39.13" class="pct low">39.13%</td>
+	<td data-value="23" class="abs low">(9&nbsp;/&nbsp;23)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="12" class="abs low">(0&nbsp;/&nbsp;12)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">(0&nbsp;/&nbsp;4)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="18" class="abs medium">(9&nbsp;/&nbsp;18)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/json/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/json/index.html">node-npmtest-es5-ext/node_modules/es5-ext/json/</a></td>
+	<td data-value="16.67" class="pic low"><span class="cover-fill" style="width: 16px;"></span><span class="cover-empty" style="width:84px;"></span></td>
+	<td data-value="16.67" class="pct low">16.67%</td>
+	<td data-value="18" class="abs low">(3&nbsp;/&nbsp;18)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="8" class="abs low">(0&nbsp;/&nbsp;8)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="3" class="abs low">(0&nbsp;/&nbsp;3)</td>
+	<td data-value="20" class="pct low">20%</td>
+	<td data-value="15" class="abs low">(3&nbsp;/&nbsp;15)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/</a></td>
+	<td data-value="8.11" class="pic low"><span class="cover-fill" style="width: 8px;"></span><span class="cover-empty" style="width:92px;"></span></td>
+	<td data-value="8.11" class="pct low">8.11%</td>
+	<td data-value="74" class="abs low">(6&nbsp;/&nbsp;74)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="44" class="abs low">(0&nbsp;/&nbsp;44)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="3" class="abs low">(0&nbsp;/&nbsp;3)</td>
+	<td data-value="8.7" class="pct low">8.7%</td>
+	<td data-value="69" class="abs low">(6&nbsp;/&nbsp;69)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/acosh/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/acosh/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/acosh/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/asinh/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/asinh/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/asinh/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/atanh/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/atanh/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/atanh/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/cbrt/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/cbrt/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/cbrt/</a></td>
+	<td data-value="38.89" class="pic low"><span class="cover-fill" style="width: 38px;"></span><span class="cover-empty" style="width:62px;"></span></td>
+	<td data-value="38.89" class="pct low">38.89%</td>
+	<td data-value="18" class="abs low">(7&nbsp;/&nbsp;18)</td>
+	<td data-value="16.67" class="pct low">16.67%</td>
+	<td data-value="12" class="abs low">(2&nbsp;/&nbsp;12)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="53.85" class="pct medium">53.85%</td>
+	<td data-value="13" class="abs medium">(7&nbsp;/&nbsp;13)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/clz32/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/clz32/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/clz32/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/cosh/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/cosh/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/cosh/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/expm1/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/expm1/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/expm1/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/fround/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/fround/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/fround/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/hypot/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/hypot/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/hypot/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/imul/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/imul/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/imul/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/log10/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/log10/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/log10/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/log1p/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/log1p/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/log1p/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/log2/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/log2/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/log2/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/sign/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/sign/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/sign/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="6" class="abs medium">(4&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/sinh/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/sinh/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/sinh/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="6" class="abs medium">(4&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/tanh/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/tanh/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/tanh/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="6" class="abs medium">(4&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/math/trunc/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/math/trunc/index.html">node-npmtest-es5-ext/node_modules/es5-ext/math/trunc/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="6" class="abs medium">(4&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/</a></td>
+	<td data-value="50" class="pic medium"><span class="cover-fill" style="width: 50px;"></span><span class="cover-empty" style="width:50px;"></span></td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="20" class="abs medium">(10&nbsp;/&nbsp;20)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="12" class="abs low">(0&nbsp;/&nbsp;12)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="5" class="abs low">(0&nbsp;/&nbsp;5)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="15" class="abs medium">(10&nbsp;/&nbsp;15)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/#/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/#/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/#/</a></td>
+	<td data-value="42.86" class="pic low"><span class="cover-fill" style="width: 42px;"></span><span class="cover-empty" style="width:58px;"></span></td>
+	<td data-value="42.86" class="pct low">42.86%</td>
+	<td data-value="7" class="abs low">(3&nbsp;/&nbsp;7)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="4" class="abs low">(0&nbsp;/&nbsp;4)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="1" class="abs low">(0&nbsp;/&nbsp;1)</td>
+	<td data-value="42.86" class="pct low">42.86%</td>
+	<td data-value="7" class="abs low">(3&nbsp;/&nbsp;7)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/epsilon/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/epsilon/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/epsilon/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/is-finite/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/is-finite/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/is-finite/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="71.43" class="pct medium">71.43%</td>
+	<td data-value="7" class="abs medium">(5&nbsp;/&nbsp;7)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/is-integer/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/is-integer/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/is-integer/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="71.43" class="pct medium">71.43%</td>
+	<td data-value="7" class="abs medium">(5&nbsp;/&nbsp;7)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/is-nan/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/is-nan/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/is-nan/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="71.43" class="pct medium">71.43%</td>
+	<td data-value="7" class="abs medium">(5&nbsp;/&nbsp;7)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/is-safe-integer/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/is-safe-integer/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/is-safe-integer/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="71.43" class="pct medium">71.43%</td>
+	<td data-value="7" class="abs medium">(5&nbsp;/&nbsp;7)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/max-safe-integer/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/max-safe-integer/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/max-safe-integer/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/number/min-safe-integer/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/number/min-safe-integer/index.html">node-npmtest-es5-ext/node_modules/es5-ext/number/min-safe-integer/</a></td>
+	<td data-value="100" class="pic high"><span class="cover-fill cover-full" style="width: 100px;"></span><span class="cover-empty" style="width:0px;"></span></td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/object/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/object/index.html">node-npmtest-es5-ext/node_modules/es5-ext/object/</a></td>
+	<td data-value="30.55" class="pic low"><span class="cover-fill" style="width: 30px;"></span><span class="cover-empty" style="width:70px;"></span></td>
+	<td data-value="30.55" class="pct low">30.55%</td>
+	<td data-value="419" class="abs low">(128&nbsp;/&nbsp;419)</td>
+	<td data-value="4.66" class="pct low">4.66%</td>
+	<td data-value="193" class="abs low">(9&nbsp;/&nbsp;193)</td>
+	<td data-value="14.67" class="pct low">14.67%</td>
+	<td data-value="75" class="abs low">(11&nbsp;/&nbsp;75)</td>
+	<td data-value="35.01" class="pct low">35.01%</td>
+	<td data-value="357" class="abs low">(125&nbsp;/&nbsp;357)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/object/assign/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/object/assign/index.html">node-npmtest-es5-ext/node_modules/es5-ext/object/assign/</a></td>
+	<td data-value="87.5" class="pic high"><span class="cover-fill" style="width: 87px;"></span><span class="cover-empty" style="width:13px;"></span></td>
+	<td data-value="87.5" class="pct high">87.5%</td>
+	<td data-value="8" class="abs high">(7&nbsp;/&nbsp;8)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="7" class="abs high">(7&nbsp;/&nbsp;7)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/object/keys/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/object/keys/index.html">node-npmtest-es5-ext/node_modules/es5-ext/object/keys/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/object/set-prototype-of/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/object/set-prototype-of/index.html">node-npmtest-es5-ext/node_modules/es5-ext/object/set-prototype-of/</a></td>
+	<td data-value="85.71" class="pic high"><span class="cover-fill" style="width: 85px;"></span><span class="cover-empty" style="width:15px;"></span></td>
+	<td data-value="85.71" class="pct high">85.71%</td>
+	<td data-value="7" class="abs high">(6&nbsp;/&nbsp;7)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="6" class="abs medium">(4&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="6" class="abs high">(6&nbsp;/&nbsp;6)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/index.html">node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/</a></td>
+	<td data-value="58.33" class="pic medium"><span class="cover-fill" style="width: 58px;"></span><span class="cover-empty" style="width:42px;"></span></td>
+	<td data-value="58.33" class="pct medium">58.33%</td>
+	<td data-value="12" class="abs medium">(7&nbsp;/&nbsp;12)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="6" class="abs low">(0&nbsp;/&nbsp;6)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="3" class="abs low">(0&nbsp;/&nbsp;3)</td>
+	<td data-value="70" class="pct medium">70%</td>
+	<td data-value="10" class="abs medium">(7&nbsp;/&nbsp;10)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/index.html">node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/</a></td>
+	<td data-value="71.43" class="pic medium"><span class="cover-fill" style="width: 71px;"></span><span class="cover-empty" style="width:29px;"></span></td>
+	<td data-value="71.43" class="pct medium">71.43%</td>
+	<td data-value="7" class="abs medium">(5&nbsp;/&nbsp;7)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="0" class="abs high">(0&nbsp;/&nbsp;0)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="2" class="abs low">(0&nbsp;/&nbsp;2)</td>
+	<td data-value="71.43" class="pct medium">71.43%</td>
+	<td data-value="7" class="abs medium">(5&nbsp;/&nbsp;7)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/match/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/match/index.html">node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/match/</a></td>
+	<td data-value="70" class="pic medium"><span class="cover-fill" style="width: 70px;"></span><span class="cover-empty" style="width:30px;"></span></td>
+	<td data-value="70" class="pct medium">70%</td>
+	<td data-value="10" class="abs medium">(7&nbsp;/&nbsp;10)</td>
+	<td data-value="33.33" class="pct low">33.33%</td>
+	<td data-value="6" class="abs low">(2&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="9" class="abs medium">(6&nbsp;/&nbsp;9)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/replace/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/replace/index.html">node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/replace/</a></td>
+	<td data-value="70" class="pic medium"><span class="cover-fill" style="width: 70px;"></span><span class="cover-empty" style="width:30px;"></span></td>
+	<td data-value="70" class="pct medium">70%</td>
+	<td data-value="10" class="abs medium">(7&nbsp;/&nbsp;10)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="9" class="abs medium">(6&nbsp;/&nbsp;9)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/search/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/search/index.html">node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/search/</a></td>
+	<td data-value="70" class="pic medium"><span class="cover-fill" style="width: 70px;"></span><span class="cover-empty" style="width:30px;"></span></td>
+	<td data-value="70" class="pct medium">70%</td>
+	<td data-value="10" class="abs medium">(7&nbsp;/&nbsp;10)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="9" class="abs medium">(6&nbsp;/&nbsp;9)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/split/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/split/index.html">node-npmtest-es5-ext/node_modules/es5-ext/reg-exp/#/split/</a></td>
+	<td data-value="70" class="pic medium"><span class="cover-fill" style="width: 70px;"></span><span class="cover-empty" style="width:30px;"></span></td>
+	<td data-value="70" class="pct medium">70%</td>
+	<td data-value="10" class="abs medium">(7&nbsp;/&nbsp;10)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="2" class="abs medium">(1&nbsp;/&nbsp;2)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="9" class="abs medium">(6&nbsp;/&nbsp;9)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/</a></td>
+	<td data-value="32.14" class="pic low"><span class="cover-fill" style="width: 32px;"></span><span class="cover-empty" style="width:68px;"></span></td>
+	<td data-value="32.14" class="pct low">32.14%</td>
+	<td data-value="28" class="abs low">(9&nbsp;/&nbsp;28)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="14" class="abs low">(0&nbsp;/&nbsp;14)</td>
+	<td data-value="20" class="pct low">20%</td>
+	<td data-value="5" class="abs low">(1&nbsp;/&nbsp;5)</td>
+	<td data-value="39.13" class="pct low">39.13%</td>
+	<td data-value="23" class="abs low">(9&nbsp;/&nbsp;23)</td>
+	</tr>
+
+<tr>
+	<td class="file low" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/#/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/#/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/#/</a></td>
+	<td data-value="32.39" class="pic low"><span class="cover-fill" style="width: 32px;"></span><span class="cover-empty" style="width:68px;"></span></td>
+	<td data-value="32.39" class="pct low">32.39%</td>
+	<td data-value="71" class="abs low">(23&nbsp;/&nbsp;71)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="27" class="abs low">(0&nbsp;/&nbsp;27)</td>
+	<td data-value="0" class="pct low">0%</td>
+	<td data-value="12" class="abs low">(0&nbsp;/&nbsp;12)</td>
+	<td data-value="35.38" class="pct low">35.38%</td>
+	<td data-value="65" class="abs low">(23&nbsp;/&nbsp;65)</td>
+	</tr>
+
+<tr>
+	<td class="file medium" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/#/@@iterator/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/#/@@iterator/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/#/@@iterator/</a></td>
+	<td data-value="68.42" class="pic medium"><span class="cover-fill" style="width: 68px;"></span><span class="cover-empty" style="width:32px;"></span></td>
+	<td data-value="68.42" class="pct medium">68.42%</td>
+	<td data-value="19" class="abs medium">(13&nbsp;/&nbsp;19)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="14" class="abs medium">(7&nbsp;/&nbsp;14)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="13" class="abs high">(13&nbsp;/&nbsp;13)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/#/code-point-at/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/#/code-point-at/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/#/code-point-at/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/#/contains/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/#/contains/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/#/contains/</a></td>
+	<td data-value="88.89" class="pic high"><span class="cover-fill" style="width: 88px;"></span><span class="cover-empty" style="width:12px;"></span></td>
+	<td data-value="88.89" class="pct high">88.89%</td>
+	<td data-value="9" class="abs high">(8&nbsp;/&nbsp;9)</td>
+	<td data-value="33.33" class="pct low">33.33%</td>
+	<td data-value="6" class="abs low">(2&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="2" class="abs high">(2&nbsp;/&nbsp;2)</td>
+	<td data-value="87.5" class="pct high">87.5%</td>
+	<td data-value="8" class="abs high">(7&nbsp;/&nbsp;8)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/#/ends-with/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/#/ends-with/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/#/ends-with/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="6" class="abs medium">(4&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/#/normalize/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/#/normalize/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/#/normalize/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/#/repeat/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/#/repeat/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/#/repeat/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/#/starts-with/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/#/starts-with/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/#/starts-with/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="66.67" class="pct medium">66.67%</td>
+	<td data-value="6" class="abs medium">(4&nbsp;/&nbsp;6)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/from-code-point/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/from-code-point/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/from-code-point/</a></td>
+	<td data-value="83.33" class="pic high"><span class="cover-fill" style="width: 83px;"></span><span class="cover-empty" style="width:17px;"></span></td>
+	<td data-value="83.33" class="pct high">83.33%</td>
+	<td data-value="6" class="abs high">(5&nbsp;/&nbsp;6)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="5" class="abs high">(5&nbsp;/&nbsp;5)</td>
+	</tr>
+
+<tr>
+	<td class="file high" data-value="node-npmtest-es5-ext/node_modules/es5-ext/string/raw/"><a href="node-npmtest-es5-ext/node_modules/es5-ext/string/raw/index.html">node-npmtest-es5-ext/node_modules/es5-ext/string/raw/</a></td>
+	<td data-value="87.5" class="pic high"><span class="cover-fill" style="width: 87px;"></span><span class="cover-empty" style="width:13px;"></span></td>
+	<td data-value="87.5" class="pct high">87.5%</td>
+	<td data-value="8" class="abs high">(7&nbsp;/&nbsp;8)</td>
+	<td data-value="50" class="pct medium">50%</td>
+	<td data-value="4" class="abs medium">(2&nbsp;/&nbsp;4)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="1" class="abs high">(1&nbsp;/&nbsp;1)</td>
+	<td data-value="100" class="pct high">100%</td>
+	<td data-value="7" class="abs high">(7&nbsp;/&nbsp;7)</td>
+	</tr>
+
+</tbody>
+</table>
+</div></div>
+<div class="footer">
+    <div class="meta">Generated by <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a> at Tue Apr 18 2017 01:35:41 GMT+0000 (UTC)</div>
+</div>
+</body>
+</html>
