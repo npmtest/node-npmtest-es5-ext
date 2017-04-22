@@ -1,6 +1,6 @@
 {
     "author": "kai zhu <kaizhu256@gmail.com>",
-    "description": "test coverage for [es5-ext (v0.10.15)](https://github.com/medikoo/es5-ext#readme) [![npm package](https://img.shields.io/npm/v/npmtest-es5-ext.svg?style=flat-square)](https://www.npmjs.org/package/npmtest-es5-ext) [![travis-ci.org build-status](https://api.travis-ci.org/npmtest/node-npmtest-es5-ext.svg)](https://travis-ci.org/npmtest/node-npmtest-es5-ext)",
+    "description": "#### basic test coverage for  [es5-ext (v0.10.15)](https://github.com/medikoo/es5-ext#readme)  [![npm package](https://img.shields.io/npm/v/npmtest-es5-ext.svg?style=flat-square)](https://www.npmjs.org/package/npmtest-es5-ext) [![travis-ci.org build-status](https://api.travis-ci.org/npmtest/node-npmtest-es5-ext.svg)](https://travis-ci.org/npmtest/node-npmtest-es5-ext)",
     "devDependencies": {
         "electron-lite": "kaizhu256/node-electron-lite#alpha",
         "es5-ext": "*",
@@ -36,5 +36,5 @@
         "start": "PORT=${PORT:-8080} utility2 start test.js",
         "test": "(set -e; export PORT=$(utility2 shServerPortRandom); utility2 test test.js)"
     },
-    "version": "0.0.1"
+    "version": "2017.4.23"
 }
